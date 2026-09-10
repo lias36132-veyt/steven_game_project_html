@@ -20,32 +20,18 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            position: relative;
         }
         
-        /* Canvas pour l'effet de miroir, traînée et cercle de scan */
-        #interactive-scan-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
         /* Écran d'accueil du jeu */
         #game-launcher {
             text-align: center;
-            background-color: rgba(30, 30, 36, 0.85);
-            backdrop-filter: blur(10px);
+            background-color: #1e1e24;
             padding: 40px 20px;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 400px;
             z-index: 100;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .btn-start {
             background-color: #30d158;
@@ -59,11 +45,10 @@
             margin-top: 20px;
             width: 100%;
             max-width: 250px;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
         }
         .btn-start:hover {
             background-color: #24b34b;
-            transform: scale(1.02);
         }
 
         /* Zone de simulation des alertes */
@@ -91,7 +76,7 @@
             100% { transform: translate(0, 0); }
         }
 
-        /* Effet Flash Rouge Sang */
+        /* Effet Flash Rouge Sang (Bouton X Piège) */
         .blood-flash {
             animation: bloodFlashAnim 0.3s ease-out;
         }
@@ -162,6 +147,8 @@
         }
         .warning-sign { color: #dd2c00; font-weight: bold; font-size: 20px; }
         .vertical-divider { width: 1px; height: 24px; background-color: #ddcccc; margin: 0 15px; }
+        
+        /* Arrière-plan invisible pour le triple-clic de secours tactile */
         #emergency-background-trigger { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 11; }
 
         /* Faux Écran Bleu (BSOD) */
@@ -285,9 +272,6 @@
 </head>
 <body>
 
-    <!-- Canvas pour l'effet de scan, traînée et cercle interactif -->
-    <canvas id="interactive-scan-bg"></canvas>
-
     <!-- 1. Écran de lancement -->
     <div id="game-launcher">
         <h2>Steven Game Project</h2>
@@ -295,3 +279,14 @@
         <button class="btn-start" onclick="initiateSequence()">START GAME</button>
     </div>
 
+    <!-- 2. Zone contenant la simulation visuelle -->
+    <div id="simulation-zone">
+        <div id="emergency-background-trigger"></div>
+    </div>
+
+    <!-- 3. Réplique Faux Écran Bleu (BSOD) -->
+    <div id="bsod-screen">
+        <div class="bsod-smiley">:(</div>
+        <div class="bsod-message">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</div>
+        <div class="bsod-percentage"><span id="progress-val">0</span>% complete</div>
+        
