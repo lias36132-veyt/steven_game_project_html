@@ -20,9 +20,10 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            position: relative;
         }
         
-        /* Écran d'accueil du jeu */
+        /* Écran d'accueil du jeu - Configuration propre des couches */
         #game-launcher {
             text-align: center;
             background-color: #1e1e24;
@@ -31,7 +32,8 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 400px;
-            z-index: 100;
+            position: relative;
+            z-index: 100; /* Assure que le menu reste au premier plan au départ */
         }
         .btn-start {
             background-color: #30d158;
@@ -45,6 +47,7 @@
             margin-top: 20px;
             width: 100%;
             max-width: 250px;
+            display: inline-block;
             transition: background 0.2s;
         }
         .btn-start:hover {
@@ -148,7 +151,7 @@
         .warning-sign { color: #dd2c00; font-weight: bold; font-size: 20px; }
         .vertical-divider { width: 1px; height: 24px; background-color: #ddcccc; margin: 0 15px; }
         
-        /* Arrière-plan invisible pour le triple-clic de secours tactile */
+        /* Arrière-plan pour le triple-clic de secours tactile */
         #emergency-background-trigger { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 11; }
 
         /* Faux Écran Bleu (BSOD) */
@@ -259,15 +262,6 @@
         .login-submit-btn:hover {
             color: #00a4ef;
         }
-
-        @media (max-width: 600px) {
-            #bsod-screen { padding: 15% 6% 5% 6%; }
-            .bsod-smiley { font-size: 80px; margin-bottom: 20px; }
-            .bsod-message { font-size: 17px; margin-bottom: 25px; }
-            .bsod-percentage { font-size: 17px; margin-bottom: 35px; }
-            .bsod-footer { flex-direction: column; gap: 20px; }
-            .bsod-qrcode { width: 75px; height: 75px; }
-        }
     </style>
 </head>
 <body>
@@ -276,7 +270,7 @@
     <div id="game-launcher">
         <h2>Steven Game Project</h2>
         <p style="color: #a0a0a5; margin-top: 5px;">Version d'évaluation HTML</p>
-        <button class="btn-start" onclick="initiateSequence()">START GAME</button>
+        <button class="btn-start" id="start-trigger-btn">START GAME</button>
     </div>
 
     <!-- 2. Zone contenant la simulation visuelle -->
@@ -290,3 +284,6 @@
         <div class="bsod-message">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</div>
         <div class="bsod-percentage"><span id="progress-val">0</span>% complete</div>
         
+        <div class="bsod-footer">
+            <div class="bsod-qrcode">
+                <div class="qr-black"></div><div class="qr-black"></div><div class="qr-block"></div>
