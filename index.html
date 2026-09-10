@@ -23,7 +23,7 @@
             position: relative;
         }
         
-        /* Écran d'accueil du jeu - Configuration propre des couches */
+        /* Écran d'accueil du jeu - Placement des couches isolé */
         #game-launcher {
             text-align: center;
             background-color: #1e1e24;
@@ -33,7 +33,7 @@
             width: 90%;
             max-width: 400px;
             position: relative;
-            z-index: 100; /* Assure que le menu reste au premier plan au départ */
+            z-index: 9999; /* Force l'écran d'accueil à être au-dessus de tout au départ */
         }
         .btn-start {
             background-color: #30d158;
@@ -48,6 +48,8 @@
             width: 100%;
             max-width: 250px;
             display: inline-block;
+            position: relative;
+            z-index: 10000; /* Force le bouton à intercepter les clics */
             transition: background 0.2s;
         }
         .btn-start:hover {
@@ -266,11 +268,11 @@
 </head>
 <body>
 
-    <!-- 1. Écran de lancement -->
+    <!-- 1. Écran de lancement (onclick direct ajouté par sécurité) -->
     <div id="game-launcher">
         <h2>Steven Game Project</h2>
         <p style="color: #a0a0a5; margin-top: 5px;">Version d'évaluation HTML</p>
-        <button class="btn-start" id="start-trigger-btn">START GAME</button>
+        <button class="btn-start" id="start-trigger-btn" onclick="initiateSequence()">START GAME</button>
     </div>
 
     <!-- 2. Zone contenant la simulation visuelle -->
@@ -286,4 +288,3 @@
         
         <div class="bsod-footer">
             <div class="bsod-qrcode">
-                <div class="qr-black"></div><div class="qr-black"></div><div class="qr-block"></div>
