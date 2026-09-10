@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steven Game Project</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        /* Écran d'accueil du jeu */
+        #game-launcher {
+            text-align: center;
+            background-color: #1e1e24;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .btn-start {
+            background-color: #30d158;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        .btn-start:hover {
+            background-color: #24b34b;
+        }
+
+        /* Zone de simulation des alertes */
+        #simulation-zone {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0c;
+            z-index: 10;
+        }
+
+        /* Style des fausses fenêtres d'avertissement */
+        .fake-window {
+            position: absolute;
+            background-color: #f0f0f0;
+            color: #000000;
+            border: 1px solid #005a9e;
+            width: 300px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            font-family: sans-serif;
+            z-index: 20;
+        }
+        .window-header {
+            background-color: #005a9e;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+        .window-body {
+            padding: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+        .warning-sign {
+            color: #dd2c00;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        /* Fausse fenêtre de nettoyage (Passe par-dessus TOUT) */
+        #cleanup-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 999999; 
+            justify-content: center;
+            align-items: center;
+        }
+        .cleanup-box {
+            background-color: #ffffff;
+            color: #333333;
+            padding: 35px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 2px solid #0078d4;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .btn-cleanup {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            margin-top: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cleanup:hover {
+            background-color: #005a9e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Écran de lancement -->
+    <div id="game-launcher">
+        <h2>Steven Game Project</h2>
+        <p style="color: #a0a0a5; margin-top: 5px;">Version d'évaluation HTML</p>
+        <button class="btn-start" onclick="initiateSequence()">START GAME</button>
+    </div>
+
+    <!-- 2. Zone contenant la simulation visuelle -->
+    <div id="simulation-zone"></div>
+
+    <!-- 3. Fenêtre de nettoyage finale (Passe au-dessus de tout) -->
+    <div id="cleanup-screen">
+        <div class="cleanup-box">
+            <h2 style="color: #0078d4; font-size: 22px;">cleanup virus .com</h2>
+            <p style="margin-top: 15px; font-size: 15px; color: #444444; line-height: 1.4;">
+                Le scan de sécurité est terminé. Des anomalies système temporaires ont été isolées.
+            </p>
+            <button class="btn-cleanup" onclick="triggerCleanup()">Exécuter le nettoyage et réparer</button>
+        </div>
+    </div>
+
+<script>
+    let loopInterval;
+    
+    // Temps d'attente configuré à 25 secondes (25000 millisecondes)
+    const WAITING_TIME = 25000; 
+
+    function initiateSequence() {
+        document.getElementById('game-launcher').style.display = 'none';
+        
+        // Attente de 2 secondes après le clic
+        setTimeout(function() {
+            document.getElementById('simulation-zone').style.display = 'block';
+            startWarningLoop();
+            
+            // Déclenchement de la fenêtre de nettoyage finale après 25 secondes
+            setTimeout(showCleanupWindow, WAITING_TIME);
+        }, 2000);
+    }
+
+    function createWarningWindow() {
+        const zone = document.getElementById('simulation-zone');
+        const win = document.createElement('div');
+        win.className = 'fake-window';
+        
+        // Position aléatoire sur l'écran
+        const posX = Math.random() * (window.innerWidth - 320);
+        const posY = Math.random() * (window.innerHeight - 150);
+        win.style.left = posX + 'px';
+        win.style.top = posY + 'px';
+        
+        win.innerHTML = `
+            <div class="window-header">
+                <span>Système</span>
+                <span>✕</span>
+            </div>
+            <div class="window-body">
+                <span class="warning-sign">!</span>
+                <span>Virus Detected</span>
+            </div>
+        `;
+        
+        zone.appendChild(win);
+    }
+
+    function startWarningLoop() {
+        // Apparition d'une fenêtre toutes les 800ms
+        loopInterval = setInterval(createWarningWindow, 800);
+    }
+
+    function showCleanupWindow() {
+        // Arrête la création de nouvelles fenêtres d'erreur
+        clearInterval(loopInterval);
+        
+        // Rend visible l'écran de nettoyage au premier plan complet
+        document.getElementById('cleanup-screen').style.display = 'flex';
+    }
+
+    function triggerCleanup() {
+        // Boîte de dialogue "Are you sure?" native avec options OK / Annuler
+        const conf = confirm("Are you sure?");
+        if (conf) {
+            // Remet tout à l'état normal si l'utilisateur clique sur OK
+            document.getElementById('cleanup-screen').style.display = 'none';
+            document.getElementById('simulation-zone').style.display = 'none';
+            document.getElementById('simulation-zone').innerHTML = ''; // Efface toutes les alertes accumulées
+            document.getElementById('game-launcher').style.display = 'block'; // Réaffiche l'écran d'accueil
+        }
+    }
+</script>
+
+</body>
+</html>
